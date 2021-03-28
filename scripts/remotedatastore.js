@@ -1,37 +1,42 @@
-const { $dataMetaSchema } = require("ajv");
-
 (function (window) {
-    'use strict';
+    'use strict'
     var App = window.App || {};
+    var $ = window.jQuery;
 
     function RemoteDataStore(url) {
-        if (!url) {throw new Error('No remote url supplied'); }
+        if(!url) {
+            throw new Error('No remote URL supplied.');
+        }
+
+        this.serverUrl = url;
     }
 
     RemoteDataStore.prototype.add = function (key, val) {
-        //this.data[key] = val;
-        $.post(this.serverUrl, val, function(serverResponse) {
+        $.post(this.serverUrl, val, function (serverResponse) {
             console.log(serverResponse);
         });
     };
 
-    RemoteDataStore
-    .prototype.get = function(key) {
-        return this.data[key];
+    RemoteDataStore.prototype.getAll = function (cb) {
+        $.get(this.serverUrl, function (serverResponse) {
+            console.log(serverResponse);
+            cb(serverResponse);
+        });
     };
 
-    RemoteDataStore
-    .prototype.getAll = function() {
-        return this.data;
+    RemoteDataStore.prototype.get = function (key, cb) {
+        $.get(this.serverUrl + '/' + key, function (serverResponse) {
+            console.log(serverResponse);
+            cb(serverResponse);
+        });
     };
 
-    RemoteDataStore
-    .prototype.remove = function(key) {
-        delete this.data[key];
+    RemoteDataStore.prototype.remove = function (key) {
+        $.ajax(this.serverUrl + '/' + key, {
+            type: 'DELETE'
+        });
     };
 
-    App.RemoteDataStore
-     = RemoteDataStore
-    ;
+    App.RemoteDataStore = RemoteDataStore;
     window.App = App;
-})(window);
+}) (window);
