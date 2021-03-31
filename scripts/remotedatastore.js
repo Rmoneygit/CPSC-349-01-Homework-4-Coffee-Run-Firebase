@@ -17,17 +17,15 @@
         });
     };
 
-    RemoteDataStore.prototype.getAll = function (cb) {
+    RemoteDataStore.prototype.getAll = function () {
         $.get(this.serverUrl, function (serverResponse) {
             console.log(serverResponse);
-            cb(serverResponse);
         });
     };
 
-    RemoteDataStore.prototype.get = function (key, cb) {
+    RemoteDataStore.prototype.get = function (key) {
         $.get(this.serverUrl + '/' + key, function (serverResponse) {
             console.log(serverResponse);
-            cb(serverResponse);
         });
     };
 
